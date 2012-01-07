@@ -1,7 +1,3 @@
----
-layout: default
----
-
 <!DOCTYPE html>
 <!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
 <!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
@@ -12,7 +8,7 @@ layout: default
 	<!-- Basic Page Needs
   ================================================== -->
 	<meta charset="utf-8">
-    <title>rmascarenhas</title>
+    <title>rmascarenhas - My First Blog Post</title>
 	<meta name="description" content="Welcome to my blog! Here you will find a lot of stuff related
     to the software development and computer science world.">
     <meta name=keywords" content="blog, mascarenhas, renato mascarenhas, ruby, c, software development, development, 
@@ -59,31 +55,16 @@ layout: default
         </div>
 
         <div class="twelve columns offset-by-one main_content">
-            <div class="three columns alpha">
-                <img src="/images/meme.png" />
-                <h6><em>Challenge accepted.</em></h6>
-            </div>
-
-            <div class="nine columns omega">
-                <p>Hi!</p>
-                <p>
-                    My name is Renato, and you have just reached my blog. If you haven't got
-                    anything better to do (you probably have), feel free to read one of my
-                    blog posts.
-                </p>
-            </div>
-        </div>
-
-        <div class="twelve columns offset-by-one main_content">
             <div id="space"></div>
+            <hr />
+            <h1>My First Blog Post</h1>
+            <em><h6>Posted on January 05, 2012</h6></em>
+            <hr />
+            <div id="space"></div>
+            <p>C is a programming language.</p>
 
-            {% for post in site.posts %}
-                <p>
-                    <a class="post_title" href="{{ post.url }}">{{ post.title }}</a>
-                    <span class="post_date">({{ post.date | date: '%Y-%m-%d' }})</span>
-                </p>
-                <hr />
-            {% endfor %}
+<p>So is <strong>Ruby</strong>, you know. <em>Didn't you??</em></p>
+
         </div>
 	</div><!-- container -->
 

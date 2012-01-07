@@ -1,0 +1,63 @@
+body {
+    background: #e8eff5 url('../images/background.png');
+}
+
+.logo {
+    text-align: center;
+    float: none;
+}
+
+@font-face {
+    font-family: 'Lobster13Regular';
+    src: url('../fonts/Lobster_1.3-webfont.eot');
+    src: url('../fonts/Lobster_1.3-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Lobster_1.3-webfont.woff') format('woff'),
+         url('../fonts/Lobster_1.3-webfont.ttf') format('truetype'),
+         url('../fonts/Lobster_1.3-webfont.svg#Lobster13Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'junctionregularRegular';
+    src: url('../fonts/Junction-webfont.eot');
+    src: url('../fonts/Junction-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Junction-webfont.woff') format('woff'),
+         url('../fonts/Junction-webfont.ttf') format('truetype'),
+         url('../fonts/Junction-webfont.svg#junctionregularRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+p {
+    font: 18px/27px junctionregularRegular, Arial, sans-serif;
+}
+
+.post_title {
+    font: 27px/41px junctionregularRegular, Arial, sans-serif;
+}
+
+.post_date {
+    padding-left: 5em;
+}
+
+#space {
+    padding-top: 3em;
+}
+
+h1,h2,h3,h4,h5 {
+    font: junctionregularRegular, Arial, sans-serif;
+}
+
+.fancy {
+    font-family: Lobster13Regular;
+    color: #101010;
+}
+
+.main_content {
+	background-color: #fff;
+	width: 925px;
+	padding: 20px 15px 5px 20px;
+}
