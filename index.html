@@ -59,37 +59,68 @@ layout: default
         </div>
 
         <div class="twelve columns offset-by-one main_content">
-            <div class="three columns alpha">
-                <img src="/images/meme.png" />
-                <h6><em>Challenge accepted.</em></h6>
-            </div>
-
-            <div class="nine columns omega">
-                <p>Hi!</p>
-                <p>
-                    My name is Renato, and you have just reached my blog. If you haven't got
-                    anything better to do (you probably have), feel free to read one of my
-                    blog posts.
-                </p>
-            </div>
+            <ul class="tabs">
+                <li><a class="active" href="#blog">Blog</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
         </div>
 
-        <div class="twelve columns offset-by-one main_content">
-            <div id="space"></div>
+        <ul class="tabs-content">
+            <li class="active" id="blog">
 
-            {% for post in site.posts %}
-                <p>
-                    <a class="post_title" href="{{ post.url }}">{{ post.title }}</a>
-                    <span class="post_date">({{ post.date | date: '%Y-%m-%d' }})</span>
-                </p>
-                <hr />
-            {% endfor %}
-        </div>
+                <div class="twelve columns offset-by-one main_content">
+                    <div class="three columns alpha">
+                        <img src="/images/meme.png" />
+                        <h6><em>Challenge accepted.</em></h6>
+                    </div>
+
+                    <div class="nine columns omega">
+                        <p>Hi!</p>
+                        <p>
+                            My name is Renato, and you have just reached my blog. If you haven't got
+                            anything better to do (you probably have), feel free to read one of my
+                            blog posts.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="twelve columns offset-by-one main_content">
+                    <div id="space"></div>
+
+                    {% for post in site.posts %}
+                        <p>
+                            <a class="post_title" href="{{ post.url }}">{{ post.title }}</a>
+                            <span class="post_date">({{ post.date | date: '%Y-%m-%d' }})</span>
+                        </p>
+                        <hr />
+                    {% endfor %}
+                </div>
+            </li>
+
+            <li id="about">
+                <div class="twelve columns offset-by-one main_content">
+                    <p>
+                        My name is Renato and I am a brazilian CS student. That's it.
+                    </p>
+                    <p>
+                        Oh, and if you want to contact me just <a href="mailto:renato.mascosta@gmail.com">
+                        mail</a> me, and I will get back to you as soon as possible.
+                    </p>
+
+                    <div id="space"></div>
+                    <p align="center">
+                        <img src="/images/sun.png" />
+                        <h6 align="center"><em>Sunrise or sunset?</em></h6>
+                    </p>
+                </div>
+            </li>
+        </ul>
 	</div><!-- container -->
 
 	<!-- JS
 	================================================== -->
 	<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+	<script src="/javascripts/tabs.js"></script>
 
 <!-- End Document
 ================================================== -->
