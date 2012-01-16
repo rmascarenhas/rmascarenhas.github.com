@@ -1,0 +1,31 @@
+---
+layout: nil
+---
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ 
+  <title>rmascarenhas.com</title>
+  <link href="http://rmascarenhas.com/"/>
+  <link type="application/atom+xml" rel="self" href="http://rmascarenhas.com/atom.xml"/>
+  <updated>{{ site.time | date_to_xmlschema }}</updated>
+  <id>http://rmascarenhas.com/</id>
+  <author>
+    <name>Renato Mascarenhas</name>
+    <email>renato.mascosta@gmail.com</email>
+  </author>
+
+  {% for post in site.posts %}
+  <entry>
+    <id>http://rmascarenhas.com{{ post.id }}</id>
+    <link type="text/html" rel="alternate" href="http://rmascarenhas.com{{ post.url }}"/>
+    <title>{{ post.title }}</title>
+    <updated>{{ post.date | date_to_xmlschema }}</updated>
+    <author>
+      <name>Renato Mascarenhas</name>
+      <uri>http://rmascarenhas.com/</uri>
+    </author>
+    <content type="html">{{ post.content | xml_escape }}</content>
+  </entry>
+  {% endfor %}
+ 
+</feed>

@@ -56,6 +56,10 @@ h1,h2,h3,h4,h5 {
     color: #101010;
 }
 
+.right {
+    text-align: right;
+}
+
 .main_content {
 	background-color: #fff;
 	width: 925px;

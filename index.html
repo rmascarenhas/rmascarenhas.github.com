@@ -53,12 +53,18 @@ layout: default
 
             <div class="nine columns omega">
                 <h1 class="fancy">rmascarenhas.com</h1>
-                <h5 class="fancy">on how to write software which is bad, slow and yet expensive</h1>
+                <h5 class="fancy">on how to write software which is bad, slow and still expensive</h1>
             </div>
 
         </div>
 
-        <div class="twelve columns offset-by-one main_content">
+        <div class="sixteen columns right">
+            <a href="/rss.xml"><img src="/images/rss.png" /></a>
+            <a href="http://twitter.com/rmascarenhasc"><img src="/images/twitter.png" /></a>
+            <a href="http://github.com/rmascarenhas"><img src="/images/gh.png" /></a>
+        </div>
+
+        <div class="sixteen columns offset-by-one main_content">
             <ul class="tabs">
                 <li><a class="active" href="#blog">Blog</a></li>
                 <li><a href="#about">About</a></li>
@@ -68,23 +74,22 @@ layout: default
         <ul class="tabs-content">
             <li class="active" id="blog">
 
-                <div class="twelve columns offset-by-one main_content">
+                <div class="sixteen columns offset-by-one main_content">
                     <div class="three columns alpha">
                         <img src="/images/meme.png" />
                         <h6><em>Challenge accepted.</em></h6>
                     </div>
 
-                    <div class="nine columns omega">
+                    <div class="thirteen columns omega">
                         <p>Hi!</p>
                         <p>
-                            My name is Renato, and you have just reached my blog. If you haven't got
-                            anything better to do (you probably have), feel free to read one of my
-                            blog posts.
+                            My name is Renato, and you have just reached my blog. Feel free to read
+                            one of my blog posts.
                         </p>
                     </div>
                 </div>
 
-                <div class="twelve columns offset-by-one main_content">
+                <div class="sixteen columns offset-by-one main_content">
                     <div id="space"></div>
 
                     {% for post in site.posts %}
@@ -98,9 +103,12 @@ layout: default
             </li>
 
             <li id="about">
-                <div class="twelve columns offset-by-one main_content">
+                <div class="sixteen columns offset-by-one main_content">
                     <p>
                         My name is Renato and I am a brazilian CS student. That's it.
+                    </p>
+                    <p>
+                        This blog, as any personal blog, will cover topics that come to my mind.
                     </p>
                     <p>
                         Oh, and if you want to contact me just <a href="mailto:renato.mascosta@gmail.com">
