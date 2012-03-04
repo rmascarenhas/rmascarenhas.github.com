@@ -35,6 +35,7 @@ layout: default
 	<link rel="stylesheet" href="/stylesheets/layout.css">
 	<link rel="stylesheet" href="/stylesheets/rmascarenhas.css">
 	<link rel="stylesheet" href="/stylesheets/normalize.css">
+  <link href='http://fonts.googleapis.com/css?family=Magra' rel='stylesheet' type='text/css'>
 
 	<!-- Favicons
 	================================================== -->
@@ -48,21 +49,25 @@ layout: default
 
 	<div class="container">
         <div class="logo">
-            <div class="three columns alpha">
-                <a href="/"><img src="/images/logo.png" /></a>
+            <div class="sixteen columns omega">
+                <h1 class="fancy">rmascarenhas.com</h1>
+                <h3 class="fancy">on how to write software which is bad, slow and still expensive</h1>
             </div>
 
-            <div class="nine columns omega">
-                <h1 class="fancy">rmascarenhas.com</h1>
-                <h5 class="fancy">on how to write software which is bad, slow and still expensive</h1>
+            <div id="space"></div>
+
+            <div class="sixteen columns alpha">
+              <a href="/"><img src="/images/banner_1_test.png" alt="rmascarenhas.com" align="center"/></a>
             </div>
 
         </div>
 
+        <br class="clear" /> <br class="clear" /> <br class="clear" />
+
         <div class="sixteen columns right">
             <a href="/rss.xml"><img src="/images/rss.png" /></a>
-            <a href="http://twitter.com/rmascarenhasc"><img src="/images/twitter.png" /></a>
-            <a href="http://github.com/rmascarenhas"><img src="/images/gh.png" /></a>
+            <a href="http://twitter.com/rmascarenhasc" target="blank"><img src="/images/twitter.png" /></a>
+            <a href="http://github.com/rmascarenhas" target="blank"><img src="/images/gh.png" /></a>
         </div>
 
         <div class="sixteen columns offset-by-one main_content">
@@ -84,7 +89,7 @@ layout: default
                     <div class="thirteen columns omega">
                         <p>Hi!</p>
                         <p>
-                            My name is Renato, and you have just reached my blog. Feel free to read
+                            I'm Renato Mascarenhas, and you have just reached my blog. Feel free to read
                             one of my blog posts.
                         </p>
                     </div>
@@ -100,16 +105,20 @@ layout: default
                         </p>
                         <hr />
                     {% endfor %}
+
                 </div>
             </li>
 
             <li id="about">
                 <div class="sixteen columns offset-by-one main_content">
                     <p>
-                        My name is Renato and I am a brazilian CS student. That's it.
+                        My name is <strong>Renato Mascarenhas</strong> and I am a brazilian CS student.
+                        I'm passionate about writing code which is clean and easily testable.
+                        Also fast.
                     </p>
                     <p>
-                        This blog, as any personal blog, will cover topics that come to my mind.
+                        This blog, as any personal blog, will cover topics as they come to my mind.
+                        Mostly regarding Ruby and C programming. Unix tricks also interest me a lot.
                     </p>
                     <p>
                         Oh, and if you want to contact me just <a href="mailto:renato.mascosta@gmail.com">
@@ -124,7 +133,27 @@ layout: default
                 </div>
             </li>
         </ul>
+
+        <ul>
+          <li> <div class="sixteen columns offset-by-one main_content">
+            <div id="space"></div>
+
+            <hr>
+            <p>
+              2012 - Renato Mascarenhas
+            </p>
+
+            <p class="small">
+              All the content in this blog is licensed under Creative Commons Atribution-ShareAlike.
+            </p>
+            <a href="http://creativecommons.org/licenses/by-sa/3.0/" alt="cc-by-sa" target="blank">
+              <img src="/images/cc-by-sa.png" />
+            </a>
+          </div></li>
+        <ul>
 	</div><!-- container -->
+
+  <div id="space"></div>
 
 	<!-- JS
 	================================================== -->
