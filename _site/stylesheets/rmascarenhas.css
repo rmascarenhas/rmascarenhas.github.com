@@ -15,11 +15,6 @@
 
 }
 
-p {
-    font-family: 'Magra', sans-serif;
-    font-size: 1.2em;
-}
-
 .small {
   font-size: 0.9em;
 }
@@ -28,12 +23,25 @@ p {
     font-family: 'Magra', sans-serif;
 }
 
+.highlight {
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -khtml-border-radius: 10px;
+    border-radius: 10px;
+    background-color: #101010;
+    font-family: 'Bitstream Vera Sans Mono', monospace;
+    font-size: 0.9em;
+    line-height: 130%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
 .post_date {
     padding-left: 5em;
 }
 
 #space {
-    padding-top: 3em;
+    padding-top: 1em;
 }
 
 h1,h2,h3,h4,h5 {
@@ -41,7 +49,7 @@ h1,h2,h3,h4,h5 {
 }
 
 .fancy {
-   font-family: Lobster13Regular;
+    font-family: Lobster13Regular;
     color: #101010;
 }
 
@@ -54,4 +62,6 @@ h1,h2,h3,h4,h5 {
 	width: 925px;
 	padding: 20px 15px 5px 20px;
   line-height: 190%;           
+  font-family: 'Magra', sans-serif;
+  font-size: 1.2em;
 }

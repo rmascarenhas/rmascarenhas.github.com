@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+
+	<!-- Basic Page Needs
+  ================================================== -->
+	<meta charset="utf-8">
+    <title>Exit, Ruby and You - rmascarenhas</title>
+	<meta name="description" content="Welcome to my blog! Here you will find a lot of stuff related
+    to the software development and computer science world.">
+    <meta name=keywords" content="blog, mascarenhas, renato mascarenhas, ruby, c, software development, development, 
+    js, tools, unix, linux, bash, shell" />
+	<meta name="author" content="Renato Mascarenhas">
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+    <meta name="robots" content="index,follow" />
+
+	<!-- Mobile Specific Metas
+  ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- CSS
+  ================================================== -->
+	<link rel="stylesheet" href="/stylesheets/base.css">
+	<link rel="stylesheet" href="/stylesheets/skeleton.css">
+	<link rel="stylesheet" href="/stylesheets/layout.css">
+	<link rel="stylesheet" href="/stylesheets/rmascarenhas.css">
+	<link rel="stylesheet" href="/stylesheets/normalize.css">
+	<link rel="stylesheet" href="/stylesheets/pygments.css">
+  <link href='http://fonts.googleapis.com/css?family=Magra' rel='stylesheet' type='text/css'>
+
+	<!-- Favicons
+	================================================== -->
+	<link rel="shortcut icon" href="/images/favicon.ico">
+	<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/images/apple-touch-icon-114x114.png">
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-30295250-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+</head>
+<body>
+
+	<div class="container">
+        <div class="logo">
+            <div class="sixteen columns omega">
+                <h1 class="fancy">rmascarenhas.com</h1>
+                <h3 class="fancy">on how to write software which is bad, slow and still expensive</h1>
+            </div>
+
+            <div id="space"></div>
+
+            <div class="sixteen columns alpha">
+              <a href="/"><img src="/images/banner_1_test.png" alt="rmascarenhas.com" align="center"/></a>
+            </div>
+        </div>
+
+        <div class="sixteen columns right">
+            <a href="/rss.xml"><img src="/images/rss.png" /></a>
+            <a href="http://twitter.com/rmascarenhasc"><img src="/images/twitter.png" /></a>
+            <a href="http://github.com/rmascarenhas"><img src="/images/gh.png" /></a>
+        </div>
+
+        <div class="sixteen columns offset-by-one main_content">
+            <div id="space"></div>
+            <hr />
+            <h1>Exit, Ruby and You</h1>
+            <em><h6>Posted on March 23, 2012</h6></em>
+            <hr />
+            <div id="space"></div>
+
+            <div class="post">
+              <h2>TL;DR</h2>
+
+<p><em>A lot is done by Ruby once your script terminates or once you call <code>exit</code>.</em>
+<em><code>at_exit</code> hooks are evaluated, finalizers are run and even an exception might be thrown. Knowing
+all of this can be useful when developing your next awesome Ruby application.</em></p>
+
+<p><strong>Disclaimer:</strong> lower-level details, if present, are valid for an UNIX-like operating system.</p>
+
+<h2>Process termination</h2>
+
+<p>To start off, let's talk a little about process termination. I won't go into a greater level of detail since this
+is not the main topic here (better save it for another post.)</p>
+
+<p>Every process has a parent, which is usually the process that created it. This constitutes what
+is called the <strong>process hierarchy</strong> and can be visualized using the <em>pstree(1)</em> command. Go and
+try it right now to have a look at your process hierarchy.</p>
+
+<p>Associated with every process termination is an <strong>exit status</strong>, used to indicate the parent process
+whether or not it was a successful execution. Conventionally, an exit status of <em>0</em> indicates success
+while a non-zero value indicates an error or abnormal program termination.</p>
+
+<h2>Ruby</h2>
+
+<p><strong>Note:</strong> In our context, <em>exit</em> refers to <em>Kernel#exit</em>, which is different from what is executed
+if you are using <a href="https://github.com/ruby/ruby/blob/trunk/lib/irb/context.rb#L264">irb</a> or
+<a href="https://github.com/pry/pry/blob/master/lib/pry/default_commands/navigating_pry.rb#L53">pry</a>.</p>
+
+<p>In Ruby, it's pretty easy to exit when you reach an unrecoverable path in your script for example.</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="k">if</span> <span class="n">greater_than_zero</span> <span class="o">&lt;</span> <span class="mi">0</span>
+      <span class="n">error_message</span>
+      <span class="nb">exit</span><span class="p">(</span><span class="kp">false</span><span class="p">)</span>
+    <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>You don't need to be in an error situation necessarily. This example, extracted from the
+<a href="http://ruby-doc.org/stdlib-1.9.3/libdoc/optparse/rdoc/OptionParser.html">OptParser</a> class documentation
+shows a common usage:</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="n">opts</span><span class="o">.</span><span class="n">on_tail</span><span class="p">(</span><span class="s2">&quot;-h&quot;</span><span class="p">,</span> <span class="s2">&quot;--help&quot;</span><span class="p">,</span> <span class="s2">&quot;Show this message&quot;</span><span class="p">)</span> <span class="k">do</span>
+      <span class="nb">puts</span> <span class="n">opts</span>
+      <span class="nb">exit</span>
+    <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>Calling <em>exit</em> with no argument makes process terminate with a success exit status. You can verify
+that <em>exit</em> terminates your process with the given status with the following:</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="err">$</span> <span class="n">ruby</span> <span class="o">-</span><span class="n">e</span> <span class="s1">&#39;exit 42&#39;</span>
+    <span class="err">$</span> <span class="n">echo</span> <span class="vg">$?</span>
+    <span class="mi">42</span>
+</code></pre>
+</div>
+
+
+<p>Worth noting is the fact that Ruby also provides the <em>exit!</em> method and, as with all methods with
+a bang at the end, it should be used only when you know what you are doing. The difference between
+<em>exit</em> and <em>exit!</em> is explained in the following sections.</p>
+
+<h3>Digging Deeper</h3>
+
+<p>Time to take a look at the implementation of the <em>exit</em> method. In this post, I'm going to show you
+only some MRI code but the interested reader can later peek at the Rubinius or JRuby code to see what
+is going on there too.</p>
+
+<p>If we look at the <a href="https://github.com/ruby/ruby/blob/trunk/process.c">process.c</a> file, we learn that
+the <em>exit</em> method is added to the <em>Kernel</em> module invoking the <em>rb_f_exit</em> function. Let's look at it</p>
+
+<div class="highlight"><pre><code class="c">    <span class="n">VALUE</span>
+    <span class="nf">rb_f_exit</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">VALUE</span> <span class="o">*</span><span class="n">argv</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="cm">/* some exit status logic */</span>
+
+        <span class="n">rb_exit</span><span class="p">(</span><span class="n">istatus</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">Qnil</span><span class="p">;</span>       <span class="cm">/* not reached */</span>
+    <span class="p">}</span>
+</code></pre>
+</div>
+
+
+<p>The first lines of this function just assigns the appropriate value to the <em>istatus</em> variable, according
+to the argument passed (if any). Then, the function that actually exits is the <em>rb_exit</em>, since the <em>return</em>
+statement is never reached. So off we go!</p>
+
+<div class="highlight"><pre><code class="c">    <span class="kt">void</span>
+    <span class="nf">rb_exit</span><span class="p">(</span><span class="kt">int</span> <span class="n">status</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">GET_THREAD</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">tag</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">VALUE</span> <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+
+            <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">INT2NUM</span><span class="p">(</span><span class="n">status</span><span class="p">);</span>
+            <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rb_str_new2</span><span class="p">(</span><span class="s">&quot;exit&quot;</span><span class="p">);</span>
+            <span class="n">rb_exc_raise</span><span class="p">(</span><span class="n">rb_class_new_instance</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">rb_eSystemExit</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="n">ruby_finalize</span><span class="p">();</span>
+        <span class="n">exit</span><span class="p">(</span><span class="n">status</span><span class="p">);</span>
+    <span class="p">}</span>
+</code></pre>
+</div>
+
+
+<p>Now we start to see some interesting calls. First of all, there seems to be an exception being raised as
+we can see by the call to <em>rb_exc_raise</em>. Is that truth?</p>
+
+<p>To check if that exception is really raised, we will use the handy
+<a href="http://www.ruby-doc.org/core-1.9.3/Kernel.html#method-i-set_trace_func">set_trace_func</a> method, allowing us to see what is called
+when we try to <em>exit</em>.</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="nb">set_trace_func</span> <span class="nb">proc</span> <span class="p">{</span> <span class="o">|</span><span class="n">event</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="nb">binding</span><span class="p">,</span> <span class="n">classname</span><span class="o">|</span>
+         <span class="nb">printf</span> <span class="s2">&quot;%8s %s:%-2d %10s %8s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">classname</span>
+    <span class="p">}</span>
+
+    <span class="nb">exit</span>
+</code></pre>
+</div>
+
+
+<p>If you run this script, you will have an output which is similar with the following:</p>
+
+<pre><code>c-return test.rb:3  set_trace_func   Kernel
+    line test.rb:5                     
+  c-call test.rb:5        exit   Kernel
+  c-call test.rb:5  initialize SystemExit
+  c-call test.rb:5  initialize Exception
+c-return test.rb:5  initialize Exception
+c-return test.rb:5  initialize SystemExit
+  c-call test.rb:5   exception Exception
+c-return test.rb:5   exception Exception
+  c-call test.rb:5   backtrace Exception
+c-return test.rb:5   backtrace Exception
+  c-call test.rb:5  set_backtrace Exception
+c-return test.rb:5  set_backtrace Exception
+   raise test.rb:5        exit   Kernel
+c-return test.rb:5        exit   Kernel
+</code></pre>
+
+<p>Aha! As we suspected, an exception is raised, and it is a <em>SystemExit</em>. This allows us
+to write some code to check if our program is terminating in a successful way:</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="k">begin</span>
+        <span class="n">call_exit_or_not</span>
+    <span class="k">rescue</span> <span class="no">SystemExit</span> <span class="o">=&gt;</span> <span class="n">e</span>
+        <span class="n">log_unsuccessful_path</span> <span class="k">unless</span> <span class="n">e</span><span class="o">.</span><span class="n">success?</span>
+    <span class="k">end</span>    
+</code></pre>
+</div>
+
+
+<p>If we have a method that might call <em>exit</em>, like the <em>#parse</em> method from <em>OptParser</em> that
+we mentioned before, the approach above might be useful.</p>
+
+<p>What is left is the <em>ruby_finalize</em> function call, which is defined in the
+<a href="https://github.com/ruby/ruby/blob/ruby_1_9_3/eval.c">eval.c</a> file.</p>
+
+<div class="highlight"><pre><code class="c">    <span class="k">static</span> <span class="kt">void</span>
+    <span class="nf">ruby_finalize_0</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">PUSH_TAG</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">EXEC_TAG</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">rb_trap_exit</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="n">POP_TAG</span><span class="p">();</span>
+        <span class="n">rb_exec_end_proc</span><span class="p">();</span>
+        <span class="n">rb_clear_trace_func</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">static</span> <span class="kt">void</span>
+    <span class="nf">ruby_finalize_1</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ruby_sig_finalize</span><span class="p">();</span>
+        <span class="n">GET_THREAD</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">errinfo</span> <span class="o">=</span> <span class="n">Qnil</span><span class="p">;</span>
+        <span class="n">rb_gc_call_finalizer_at_exit</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span>
+    <span class="nf">ruby_finalize</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ruby_finalize_0</span><span class="p">();</span>
+        <span class="n">ruby_finalize_1</span><span class="p">();</span>
+    <span class="p">}</span>
+</code></pre>
+</div>
+
+
+<p>A lot of new function calls! But I'll focus on just two of them. The <em>rb_exec_end_proc</em>
+executes all of the callbacks registered with the <em>at_exit</em> method. And there is also
+<em>rb_gc_call_finalizer_at_exit</em>, which finalizes the garbage collector. I will now
+briefly describe each of these operations in a higher level.</p>
+
+<h3>Exit hooks</h3>
+
+<p>C programmers might be used with the <em>atexit(3)</em> function from <em>stdlib</em>. The idea is the same
+in Ruby. You register a block of code and then it will be called on normal process termination.
+As with the C function, the execution order is the reverse order in which the registrations occurred.</p>
+
+<h3>Finalizers</h3>
+
+<p>Ruby supports the registration of finalizers associated with any object. This is done via the <em>define_finalizer</em>
+method in the <a href="http://www.ruby-doc.org/core-1.9.3/ObjectSpace.html">ObjectSpace</a> module (you should take a look at
+its documentation if you didn't know about it.) A finalizer is run after an object is garbage collected.</p>
+
+<p>Basically a finalizer would serve to the purpose of freeing resources associated with an object.
+In practice, their use is not encouraged in the Ruby community. If you have an object that needs to free
+some resources, then write a method to do so, or expect a block to be passed and deal
+with your resources transparently.</p>
+
+<h3>exit bang!</h3>
+
+<p>Now that we saw what happens when the <em>exit</em> method is called, let's investigate its meaner version:
+<em>exit!</em>. It should be pretty straightforward to spot the difference:</p>
+
+<div class="highlight"><pre><code class="c">    <span class="k">static</span> <span class="n">VALUE</span>
+    <span class="nf">rb_f_exit_bang</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">VALUE</span> <span class="o">*</span><span class="n">argv</span><span class="p">,</span> <span class="n">VALUE</span> <span class="n">obj</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="cm">/* exit status logic again */</span>
+
+        <span class="n">_exit</span><span class="p">(</span><span class="n">istatus</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="n">Qnil</span><span class="p">;</span>       <span class="cm">/* not reached */</span>
+    <span class="p">}</span>
+</code></pre>
+</div>
+
+
+<p>That's exactly what you thought: instead of a call to the <em>rb_exit</em> function, we have a call
+to the <em>_exit(1)</em> system call. What it means is that registered <em>at_exit</em> hooks will not be run,
+and neither will your finalizers. The <em>_exit</em> system call is <a href="http://linux.die.net/man/2/_exit">guaranteed to finish</a>,
+with no return value.</p>
+
+<h2>In the wild</h2>
+
+<p>To finish off, let's take a look at an interesting piece of code from <a href="https://github.com/seattlerb/minitest">minitest</a>,
+since it demonstrates a useful way to use <em>at_exit</em> handlers. Here it is:</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">autorun</span>
+      <span class="nb">at_exit</span> <span class="p">{</span>
+        <span class="k">next</span> <span class="k">if</span> <span class="vg">$!</span>
+
+        <span class="n">exit_code</span> <span class="o">=</span> <span class="kp">nil</span>
+
+        <span class="nb">at_exit</span> <span class="p">{</span> <span class="nb">exit</span> <span class="kp">false</span> <span class="k">if</span> <span class="n">exit_code</span> <span class="o">&amp;&amp;</span> <span class="n">exit_code</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">}</span>
+
+        <span class="n">exit_code</span> <span class="o">=</span> <span class="no">MiniTest</span><span class="o">::</span><span class="no">Unit</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">run</span> <span class="no">ARGV</span>
+      <span class="p">}</span> <span class="k">unless</span> <span class="vc">@@installed_at_exit</span>
+      <span class="vc">@@installed_at_exit</span> <span class="o">=</span> <span class="kp">true</span>
+    <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>If you ever wondered how your tests are run in a script that just defined a class that inherited from <em>MiniTest::Unit::TestCase</em>,
+here is how. In minitest, if you require <em>minitest/autorun</em>, the above method is executed, causing an <em>at_exit</em> handler to
+be registered to run your tests. Minitest is even nice enough to make sure it returns a non-zero exit status (<em>EXIT_FAILURE</em>)
+if your tests fail. This allows you to write a shell script that sends an email to your boss when your tests pass, for example.</p>
+
+<p>Also interesting is the fact that you can use <em>next</em> in an <em>at_exit</em> handler, causing the next registered handler to be executed,
+as if you were in an iteration. Sweet.</p>
+
+<h2>Tricky parts</h2>
+
+<p>Let's take minitest as an example again. If you have some code you wish to execute after your tests are run, you can do that
+using the <em>MiniTest::Unit.after_tests</em> method. You pass it a block and it is saved for later execution.</p>
+
+<p>Presumably, this was implemented using an <em>at_exit</em> call with <em>yield</em>. However, what would happen if you had the following code:</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="nb">require</span> <span class="s1">&#39;minitest/autorun&#39;</span>
+
+    <span class="c1"># pretend to have long tests so that we can check Twitter</span>
+    <span class="no">MiniTest</span><span class="o">::</span><span class="no">Unit</span><span class="o">.</span><span class="n">after_tests</span> <span class="p">{</span> <span class="nb">puts</span> <span class="s2">&quot;Calculating...&quot;</span><span class="p">;</span> <span class="nb">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>  <span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">Complex</span> <span class="o">&lt;</span> <span class="no">MiniTest</span><span class="o">::</span><span class="no">Unit</span><span class="o">::</span><span class="no">TestCase</span>
+        <span class="c1"># ...</span>
+    <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>You probably know where I'm trying to get: remember that when you require <em>minitest/autorun</em> a new <em>at_exit</em> handler
+is registered. The same used to happen when you called <em>MiniTest::Unit.after_tests</em>. Because the handlers are run
+in reverse order of registration, the code in the <em>after_tests</em> would be executed <strong>before</strong> your tests are run. That
+might not be what you expected.</p>
+
+<p>That's how the current implementation works:</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">after_tests</span> <span class="o">&amp;</span><span class="n">block</span>
+      <span class="vc">@@after_tests</span> <span class="o">&lt;&lt;</span> <span class="n">block</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">autorun</span>
+      <span class="nb">at_exit</span> <span class="p">{</span>
+        <span class="k">next</span> <span class="k">if</span> <span class="vg">$!</span>
+
+        <span class="n">exit_code</span> <span class="o">=</span> <span class="kp">nil</span>
+
+        <span class="nb">at_exit</span> <span class="p">{</span>
+          <span class="vc">@@after_tests</span><span class="o">.</span><span class="n">reverse_each</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:call</span><span class="p">)</span>
+          <span class="nb">exit</span> <span class="kp">false</span> <span class="k">if</span> <span class="n">exit_code</span> <span class="o">&amp;&amp;</span> <span class="n">exit_code</span> <span class="o">!=</span> <span class="mi">0</span>
+        <span class="p">}</span>
+
+        <span class="n">exit_code</span> <span class="o">=</span> <span class="no">MiniTest</span><span class="o">::</span><span class="no">Unit</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">run</span> <span class="no">ARGV</span>
+      <span class="p">}</span> <span class="k">unless</span> <span class="vc">@@installed_at_exit</span>
+      <span class="vc">@@installed_at_exit</span> <span class="o">=</span> <span class="kp">true</span>
+    <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>No more <em>at_exit</em> in the <em>after_tests</em> method! Instead, the blocks are stored for later execution, imediately
+after the tests are run. Now you can use the <em>after_tests</em> method before or after you require <em>minitest/autorun</em>
+and be sure that it will be executed only after your tests.</p>
+
+<p>The last tricky fact to be aware of regards the <em>SystemExit</em> exception which is raised when you call <em>exit</em>. Let's
+look at a small piece of code, this time from <a href="http://rake.rubyforge.org/">rake</a>:</p>
+
+<div class="highlight"><pre><code class="ruby">    <span class="k">def</span> <span class="nf">standard_exception_handling</span>
+      <span class="k">begin</span>
+        <span class="k">yield</span>
+      <span class="k">rescue</span> <span class="no">SystemExit</span> <span class="o">=&gt;</span> <span class="n">ex</span>
+        <span class="k">raise</span>
+      <span class="k">rescue</span> <span class="no">OptionParser</span><span class="o">::</span><span class="no">InvalidOption</span> <span class="o">=&gt;</span> <span class="n">ex</span>
+        <span class="vg">$stderr</span><span class="o">.</span><span class="n">puts</span> <span class="n">ex</span><span class="o">.</span><span class="n">message</span>
+        <span class="nb">exit</span><span class="p">(</span><span class="kp">false</span><span class="p">)</span>
+      <span class="k">rescue</span> <span class="no">Exception</span> <span class="o">=&gt;</span> <span class="n">ex</span>
+        <span class="n">display_error_message</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
+        <span class="nb">exit</span><span class="p">(</span><span class="kp">false</span><span class="p">)</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>This exception handling method tries to rescue different types of exceptions and take the appropriate action.
+What is interesting here is the fact that when a <em>SystemExit</em> is rescued, just a call to <em>raise</em> is done. The
+<em>raise</em> method, when called with no arguments, raises the content of the <em>$!</em> variable (which holds the last exception
+raised) or <em>RuntimeError</em> if it is <em>nil</em>. So in fact, it is ignored, allowing normal process termination. This is done
+because later, <em>Exception</em> is rescued and every exception in Ruby - including <em>SystemExit</em> - inherits from <em>Exception</em>.
+So, if we had something like:</p>
+
+<div class="highlight"><pre><code class="ruby">      <span class="k">begin</span>
+        <span class="k">yield</span>
+      <span class="k">rescue</span> <span class="no">Exception</span> <span class="o">=&gt;</span> <span class="n">ex</span>
+        <span class="n">display_error_message</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
+        <span class="nb">exit</span><span class="p">(</span><span class="kp">false</span><span class="p">)</span>
+      <span class="k">end</span>
+</code></pre>
+</div>
+
+
+<p>we would call <em>display_error_message</em> and <em>exit(false)</em> if we made a call to <em>exit(true)</em> in the block passed to this method,
+for example, which is probably not what we want.</p>
+
+<h2>Conclusion</h2>
+
+<p>If you are still reading, thanks! I didn't expect this to be such a long post. I'll try to make shorter ones next time.</p>
+
+<p>What is important to keep in mind from this, though, is what is done by Ruby on process termination. Being aware of
+the order in which the <em>at_exit</em> handlers are executed is very important to avoid unexpected results. Also important
+is knowing about the <em>SystemExit</em> exception and how you can inadvertently execute some code if you just rescue <em>Exception</em>
+without any further check.</p>
+
+            </div>
+
+            <hr />
+
+            <br /><br /><br />
+            <div id="disqus_thread"></div>
+            <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+            <div id="space"></div>
+
+            <hr>
+            <p>
+              2012 - Renato Mascarenhas
+            </p>
+
+            <p class="small">
+              All the content in this blog is licensed under Creative Commons Atribution-ShareAlike.
+            </p>
+            <a href="http://creativecommons.org/licenses/by-sa/3.0/" alt="cc-by-sa" target="blank">
+              <img src="/images/cc-by-sa.png" />
+            </a>
+
+            <div id="space"></div>
+        </div>
+	</div><!-- container -->
+
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+	<!-- JS
+	================================================== -->
+	<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+	<script src="/javascripts/tabs.js"></script>
+  <script src="/javascripts/disqus.js"></script>
+
+<!-- End Document
+================================================== -->
+</body>
+</html>
