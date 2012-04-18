@@ -10,7 +10,7 @@ _A lot is done by Ruby once your script terminates or once you call `exit`._
 _`at_exit` hooks are evaluated, finalizers are run and even an exception might be thrown. Knowing
 all of this can be useful when developing your next awesome Ruby application._
 
-**Disclaimer:** lower-level details, if present, are valid for an UNIX-like operating system.
+**Disclaimer:** lower-level details, if present, are valid for a UNIX-like operating system.
 
 Process termination
 -------------------
