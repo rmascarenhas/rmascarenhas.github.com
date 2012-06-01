@@ -3,6 +3,10 @@
     float: none;
 }
 
+.img {
+  position: center;
+}
+
 @font-face {
     font-family: 'Lobster13Regular';
     src: url('../fonts/Lobster_1.3-webfont.eot');
