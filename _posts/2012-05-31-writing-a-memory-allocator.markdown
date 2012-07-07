@@ -141,7 +141,7 @@ Show me some codes!!
 
 [There](http://www.canonware.com/jemalloc/) [are](http://www.hoard.org/)
 [many](http://www.malloc.de/en/) [memory](http://labs.omniti.com/labs/portableumem)
-allocators out there. However, they are some orders of magnitute more complex than
+allocators out there. However, they are some orders of magnitude more complex than
 the one we described here. Take a look at the Doug Lea's text on _dlmalloc_:
 [http://g.oswego.edu/dl/html/malloc.html](http://g.oswego.edu/dl/html/malloc.html).
 You can also peek at the source code, which is very well documented:
@@ -167,7 +167,7 @@ First, be sure to read through the man pages of the _malloc(3)_ function
 and _brk(2)_ system call. [Understanding Memory](http://www.ualberta.ca/CNS/RESEARCH/LinuxClusters/mem.html)
 is also a good read. Finally, I can't recommend enough
 [The Linux Programming Interface](http://man7.org/tlpi/) book, by Michael Kerrisk. Most
-of the content of this post was based in this book, and it is **just awesome**. Really.
+of the content of this post was based on this book, and it is **just awesome**. Really.
 Just go and get it.
 
 Conclusion

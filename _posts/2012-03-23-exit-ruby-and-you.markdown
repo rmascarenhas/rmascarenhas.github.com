@@ -107,7 +107,7 @@ statement is never reached. So off we go!
 {% endhighlight %}
 
 Now we start to see some interesting calls. First of all, there seems to be an exception being raised as
-we can see by the call to _rb\_exc\_raise_. Is that truth?
+we can see by the call to _rb\_exc\_raise_. Is that true?
 
 To check if that exception is really raised, we will use the handy 
 [set_trace_func](http://www.ruby-doc.org/core-1.9.3/Kernel.html#method-i-set_trace_func) method, allowing us to see what is called
