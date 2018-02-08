@@ -20,7 +20,7 @@ have a basic understanding of the **memory layout** of a process; i.e., how a
 process is divided after being loaded in memory. The following image roughly 
 illustrates the memory layout of a process on Linux.
 
-![Memory Layout of a process in Linux]({{ site.url }}/assets/process_memory_layout.png)
+![Memory Layout of a process in Linux]({{ site.url }}/images/process_memory_layout.png)
 
 As we can see from the previous image, a process is divided into a couple of
 _segments_. The purpose of each segment is beyond our scope right now,
