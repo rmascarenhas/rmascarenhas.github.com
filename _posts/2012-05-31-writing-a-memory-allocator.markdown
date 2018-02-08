@@ -147,7 +147,7 @@ the one we described here. Take a look at the Doug Lea's text on _dlmalloc_:
 You can also peek at the source code, which is very well documented:
 [ftp://g.oswego.edu/pub/misc/malloc.c](ftp://g.oswego.edu/pub/misc/malloc.c).
 
-[I wrote an extremely simple memory allocator](https://github.com/rmascarenhas/ooo/blob/master/C/allok.c)
+[I wrote an extremely simple memory allocator](https://github.com/rmascarenhas/lpi/blob/master/chap07/malloc.c)
 following the guidelines described in this post. It still needs some love
 but it might be good to give you a start.
 
