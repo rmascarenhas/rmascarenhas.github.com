@@ -100,7 +100,7 @@ list of free blocks_. Let's make it doubly linked to ease navigation
 between the blocks of memory. This way, our allocation function must
 mantain a free memory list similar to the one in the image below:
 
-![Linked list of free memory blocks]({{ site.url }}/images/free_block_list.png")
+![Linked list of free memory blocks]({{ site.url }}/images/free_block_list.png)
 
 Therefore, when the allocation function is called, all we need to do is to find
 a block of free memory that is big enough for our request. If there is no
