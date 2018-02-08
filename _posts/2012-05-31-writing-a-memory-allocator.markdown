@@ -100,9 +100,7 @@ list of free blocks_. Let's make it doubly linked to ease navigation
 between the blocks of memory. This way, our allocation function must
 mantain a free memory list similar to the one in the image below:
 
-<img src ="/images/free_block_list.png"
-alt="Linked list of free memory blocks" align="center" width="800" height="170"
-title="Linked list of free memory blocks" class="img"</img>
+![Linked list of free memory blocks]({{ site.url }}/images/free_block_list.png")
 
 Therefore, when the allocation function is called, all we need to do is to find
 a block of free memory that is big enough for our request. If there is no
@@ -116,9 +114,7 @@ little trick: when allocating memory, we are going to write the size of the
 block of memory in its first bytes. This way, what we are actually returning
 from a call to our allocation function is something like:
 
-<img src ="/images/allocated_block.png"
-alt="Block of memory returned by our allocation function" align="center" width="600" height="210"
-title="Block of memory returned by our allocation function" class="img"</img>
+![Block of memory returned by our allocation function]({{ site.url }}/images/allocated_block.png)
 
 Voilà! Now we can iterate over our free list and inspect the size of each block
 of memory to find a big enough block for a specific call to our allocation
